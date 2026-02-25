@@ -1,5 +1,9 @@
 #include <iostream>
 #include <string>
+#include <chrono> //zaman iþlemleri için
+#include <thread> //programý bekletmek(sleep) için
+#include <clocale>
+
 
 using namespace std;
 
@@ -49,6 +53,7 @@ void decideAction(Vehicle v, Grid g) {
 
 
 int main() {
+	setlocale(LC_ALL, "Turkish");
 
 	cout << "C-Grid: Akilli V2G Yonetim Sistemi Basliyor";
 
@@ -61,6 +66,22 @@ int main() {
 	Grid cityGrid = { 5.2, 2.9, false };
 
 	cout << "Arac durumu: %" << myCarValle.soc << "Dolu | Sebeke Fiyati: " << cityGrid.currentPrice << endl;
+
+
+	//while döngüsü ve zaman simülasyonu
+	while (true) {
+
+		decideAction(myCarValle, cityGrid);
+		if (myCarValle.soc > 0) {
+			myCarValle.soc -= 0.5;
+		}
+		
+		this_thread::sleep_for(chrono::seconds(1)); //eskiden sadece sleep(1) yazýlýrdý ama bu 1 neydi seniye mi? milisaniye mi? chrono sayesinde bunu tip güvenli (type-safe) hale getiriyoruz.
+		
+		//ekraný temizleyip verileri güncellemek için
+		system("cls");
+
+	}
 
 	return 0;
 
